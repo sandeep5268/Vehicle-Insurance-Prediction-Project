@@ -70,3 +70,6 @@ Save models related constants
 """
 SAVED_MODELS_DIR = "saved_models"
 SAVED_MODEL_NAME = "best_model.pkl"
+
+APP_HOST = "0.0.0.0"
+APP_PORT = 5000
