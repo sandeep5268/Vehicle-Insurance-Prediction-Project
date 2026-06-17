@@ -55,15 +55,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-.train-button {
-    background-color: #28a745;
-    margin-top: 15px;
-}
-
-.train-button:hover {
-    background-color: #218838;
-}
-
 .result {
     margin-top: 20px;
 }
