@@ -236,6 +236,7 @@ The project evaluates multiple machine learning algorithms and automatically sel
 ### Best Model
 
 |        Model       | GradientBoostingClassifier |
+|--------------------|----------------------------|
 | selection strategy |      Highest F1 score      |
 
 ### Evaluation Metrics
