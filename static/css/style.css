@@ -36,8 +36,11 @@ body{
 @media (max-width:768px){
     body{
         background-image: url("../images/vehicle_mobile_bg.png");
-        background-size: 100% 100%;
-        background-position: center;
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        overflow: auto;
     }
 }
 
