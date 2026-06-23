@@ -32,19 +32,6 @@ body{
     overflow:hidden;
 }
 
-/* Mobile */
-@media (max-width:768px){
-    body{
-        background-image: url("../images/vehicle_mobile_bg.png");
-        background-size: cover;
-        background-position: center top;
-        background-repeat: no-repeat;
-        background-attachment: scroll;
-        overflow: auto;
-    }
-}
-
-
 /* DARK OVERLAY */
 
 .background-overlay{
