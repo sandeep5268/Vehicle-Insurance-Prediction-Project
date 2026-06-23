@@ -14,12 +14,12 @@ body{
 }
 
 /* BODY */
-
+/* Desktop */
 body{
 
     min-height:100vh;
 
-    background-image:url("../images/vehicle_bg.png");
+    background-image:url("../images/vehicle_desktop_bg.png");
     background-size:100% 100%;
     background-position:center;
     background-repeat:no-repeat;
@@ -31,6 +31,16 @@ body{
 
     overflow:hidden;
 }
+
+/* Mobile */
+@media (max-width:768px){
+    body{
+        background-image: url("../images/vehicle_mobile_bg.png");
+        background-size: 100% 100%;
+        background-position: center;
+    }
+}
+
 
 /* DARK OVERLAY */
 
