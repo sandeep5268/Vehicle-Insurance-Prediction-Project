@@ -4,6 +4,7 @@ from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from uvicorn import run as app_run
+from fastapi import HTTPException
 
 from typing import Optional
 
@@ -42,7 +43,7 @@ class DataForm:
         self.Gender: Optional[int] = None
         self.Age: Optional[int] = None
         self.Driving_License: Optional[int] = None
-        self.Region_code: Optional[float] = None
+        self.Region_Code: Optional[float] = None
         self.Previously_Insured: Optional[int] = None
         self.Annual_Premium: Optional[float] = None
         self.Policy_Sales_Channel: Optional[float] = None
@@ -81,8 +82,9 @@ async def index(request: Request):
         name = "vehicleData.html", 
         context = 
         {
+            "request": request,
             "context": None,
-            "showpopup" : True
+            "show_popup" : False
         }
     )
     
@@ -127,12 +129,16 @@ async def predictonRouteClient(request: Request):
             request = request,
             name = "vehicleData.html",
             context = {
+                "request": request,
                 "context": status,
                 "show_popup" : True
             }
         )
     except Exception as e:
-        raise {"status": False, "error": f"{e}"}
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
     
 # Main entry point to start the FastAPI server
 if __name__ == "__main__":
