@@ -1,5 +1,6 @@
 import sys
 import os
+from typing import Tuple
 import pandas as pd
 
 from src.logger import logging
@@ -14,7 +15,7 @@ from src.utils.main_utils import load_object, save_object
 
 @dataclass
 class EvaluateModelResponse:
-    trained_model_f1_score: float
+    trained_best_model_f1_score: float
     best_model_f1_score: float
     is_model_accepted: bool
     difference: float
@@ -78,7 +79,7 @@ class ModelEvaluation:
             df = df.drop("_id", axis = 1)
         return df
     
-    def evaluate_model(self) -> EvaluateModelResponse:
+    def evaluate_model(self) -> Tuple[EvaluateModelResponse, str, str]:
         """ 
         Method Name  : evaluate_model
         Description  : This function is used to evaluate trained model 
@@ -98,11 +99,16 @@ class ModelEvaluation:
             x = self._create_dummy_columns(x)
             x = self._rename_columns(x)
             
-            trained_model = load_object(file_path= self.model_trainer_artifact.trained_model_file_path)
-            logging.info("Trained model loaded/exists.")
-            trained_model_f1_score = self.model_trainer_artifact.metric_artifact.f1_score
-            logging.info(f"f1_score for this model: {trained_model_f1_score}")
+            logging.info("Models_f1_score_report is loading from model_trainer_artifact...")
+            models_f1_score_report =  self.model_trainer_artifact.models_f1_score_report
+            logging.info("Models_f1_score_report is loaded from model_trainer_artifact...")
             
+            logging.info("Started evaluating trained models with f1_score to select best model..!")
+            best_model_name = max(models_f1_score_report, key=models_f1_score_report.get)
+            best_model_path = self.model_trainer_artifact.models_path[best_model_name]
+            trained_best_model_f1_score = models_f1_score_report[best_model_name]
+            logging.info(f"After evaluating trained models the best model name: {best_model_name}, best model path: {best_model_path}, trained best model f1 score: {trained_best_model_f1_score}")
+
             best_model_f1_score = None
             best_model = self.get_best_model()
             
@@ -110,20 +116,20 @@ class ModelEvaluation:
                 logging.info(f"Computing f1_score for production model")
                 y_hat_best_model = best_model.predict(x)
                 best_model_f1_score = f1_score(y, y_hat_best_model)
-                logging.info(f"f1_score production Model: {best_model_f1_score}, f1_score New Trained Model: {trained_model_f1_score}")  
+                logging.info(f"f1_score production Model: {best_model_f1_score}, f1_score New Trained Model: {trained_best_model_f1_score}")  
             
             tmp_best_model_score = 0  if best_model_f1_score is None else best_model_f1_score
             
             
-            result = EvaluateModelResponse(trained_model_f1_score = trained_model_f1_score,
+            result = EvaluateModelResponse(trained_best_model_f1_score = trained_best_model_f1_score,
                                              best_model_f1_score=best_model_f1_score,
-                                             is_model_accepted=trained_model_f1_score>tmp_best_model_score,
-                                             difference=trained_model_f1_score-tmp_best_model_score
+                                             is_model_accepted=trained_best_model_f1_score>tmp_best_model_score,
+                                             difference=trained_best_model_f1_score-tmp_best_model_score
                                              )
             
             
-            logging.info(f"Result: {result}")
-            return result
+            logging.info(f"Result: {result}, \nBest model name : {best_model_name}, \nBest model path: {best_model_path}")
+            return result, best_model_path, best_model_name
         except Exception as e:
             raise MyException(e, sys) from e
         
@@ -139,17 +145,17 @@ class ModelEvaluation:
             print("--------------------------------------------------------------------------------------")
             logging.info("Initialized Model Evaluation Component.")
             
-            evaluate_model_response = self.evaluate_model()
+            evaluate_model_response, best_model_path, best_model_name = self.evaluate_model()
             
-            # Save trained model only if accepted
+            # Save trained best model only if accepted
             if evaluate_model_response.is_model_accepted:
-                trained_model = load_object(
-                    self.model_trainer_artifact.trained_model_file_path
+                trained_best_model = load_object(
+                    best_model_path
                 )
 
                 save_object(
                     self.model_eval_config.model_evaluation_after_best_model_file_path,
-                    trained_model
+                    trained_best_model
                 )
                 
                 # Save stable production model
@@ -159,7 +165,7 @@ class ModelEvaluation:
 
                 save_object(
                     production_model_path,
-                    trained_model
+                    trained_best_model
                 )
                 
                 logging.info("New model accepted and saved as best model in both artifact and saved models folders.")
@@ -169,8 +175,8 @@ class ModelEvaluation:
 
             model_evaluation_artifact = ModelEvaluationArtifact(
                 is_model_accepted=evaluate_model_response.is_model_accepted,
-                trained_model_path=self.model_trainer_artifact.trained_model_file_path,
-                changed_accuracy=evaluate_model_response.difference,
+                trained_best_model_path=self.model_trainer_artifact.models_path[best_model_name],
+                changed_f1_score=evaluate_model_response.difference,
                 best_model_file_path=self.model_eval_config.model_evaluation_after_best_model_file_path
             )
 

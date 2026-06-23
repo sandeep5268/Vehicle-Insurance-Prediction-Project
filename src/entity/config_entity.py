@@ -37,21 +37,36 @@ class DataTransformationConfig:
 @dataclass
 class ModelTrainerConfig:
     model_trainer_dir: str = os.path.join(training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME)
-    trained_model_file_path: str = os.path.join(model_trainer_dir, MODEL_TRAINER_TRAINED_MODEL_DIR, MODEL_FILE_NAME)
+    trained_models_dir: str = os.path.join(model_trainer_dir, MODEL_TRAINER_TRAINED_MODEL_DIR)
+    model_metric_file_path: str = os.path.join(trained_models_dir, MODEL_METRIC_FILE_NAME)
     expected_accuracy: float = MODEL_TRAINER_EXPECTED_SCORE
-    model_config_file_path: str = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
-    _n_estimators = MODEL_TRAINER_N_ESTIMATORS
-    _min_samples_split = MODEL_TRAINER_MIN_SAMPLES_SPLIT
-    _min_sample_leaf = MODEL_TRAINER_MIN_SAMPLE_LEAF
-    _max_depth = MIN_SAMPLES_SPLIT_MAX_DEPTH
-    _criterion = MIN_SAMPLES_SPLIT_CRITERION
-    _random_state = MIN_SAMPLES_SPLIT_RANDOM_STATE
+    # RandomForestClassifier
+    _n_estimators_rfc = RFC_N_ESTIMATORS
+    _min_samples_split_rfc = RFC_MIN_SAMPLES_SPLIT
+    _min_sample_leaf_rfc = RFC_MIN_SAMPLE_LEAF
+    _max_depth_rfc = RFC_MIN_SAMPLES_SPLIT_MAX_DEPTH
+    _criterion_rfc = RFC_MIN_SAMPLES_SPLIT_CRITERION
+    _random_state_rfc = RFC_MIN_SAMPLES_SPLIT_RANDOM_STATE
+    # GradientBoostingClassifier
+    _min_sample_leaf_gbc = GBC_MIN_SAMPLE_LEAF
+    _min_samples_split_gbc = GBC_MIN_SAMPLES_SPLIT
+    _n_estimator_gbc = GBC_N_ESTIMATORS
+    _random_state_gbc = GBC_RANDOM_STATE
+    _subsample_gbc = GBC_SUBSAMPLE
+    # XGBOOSTClassifier
+    _n_estimator_xgb = XGB_N_ESTIMATOR
+    _max_depth_xgb = XGB_MAX_DEPTH
+    _learning_rate_xgb = XGB_LEARNING_RATE
+    _colsample_bytree_xgb = XGB_COLSAMPLE_BYTREE
+    _gamma_xgb = XGB_GAMMA
+    _min_child_weight_xgb = XGB_MIN_CHILD_WEIGHT
     
+        
 @dataclass
 class ModelEvaluationConfig:
     changed_threshold_score: float = MODEL_EVALUATON_CHANGED_THRESHOLD_SCORE
     model_evaluation_dir_name: str = os.path.join(training_pipeline_config.artifact_dir, MODEL_EVALUATION_DIR_NAME)
-    model_evaluation_after_best_model_file_path: str = os.path.join(model_evaluation_dir_name, BEST_MODEL_NAME, MODEL_EVALUATION_AFTER_BEST_MODEL)
+    model_evaluation_after_best_model_file_path: str = os.path.join(model_evaluation_dir_name, BEST_MODEL_DIR_NAME, MODEL_EVALUATION_AFTER_BEST_MODEL)
     
 @dataclass
 class VehiclePredictorConfig:

@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import HTMLResponse, RedirectResponse
 from uvicorn import run as app_run
 
 from typing import Optional
@@ -11,7 +10,6 @@ from typing import Optional
 # Importing constants and pipeline modules from project
 from src.constants import APP_HOST, APP_PORT
 from src.pipeline.prediction_pipeline import VehicleData, VehicleDataClassifier
-from src.pipeline.training_pipeline import TrainPipeline
 
 # Initializing the FastAPI application
 app = FastAPI()
@@ -61,7 +59,8 @@ class DataForm:
         form = await self.request.form()
         self.Gender = form.get("Gender")
         self.Age = form.get("Age")
-        self.Driving_License = form.get("Region_Code")
+        self.Driving_License = form.get("Driving_License")
+        self.Region_Code = form.get("Region_Code")
         self.Previously_Insured = form.get("Previously_Insured")
         self.Annual_Premium = form.get("Annual_Premium")
         self.Policy_Sales_Channel = form.get("Policy_Sales_Channel")
@@ -82,7 +81,8 @@ async def index(request: Request):
         name = "vehicleData.html", 
         context = 
         {
-            "context": "Rendering"
+            "context": None,
+            "showpopup" : True
         }
     )
     
@@ -100,7 +100,7 @@ async def predictonRouteClient(request: Request):
             Gender = form.Gender,
             Age = form.Age,
             Driving_License = form.Driving_License,
-            Region_Code = form.Region_code,
+            Region_Code = form.Region_Code,
             Previously_Insured = form.Previously_Insured,
             Annual_Premium = form.Annual_Premium,
             Policy_Sales_Channel = form.Policy_Sales_Channel,
@@ -119,15 +119,16 @@ async def predictonRouteClient(request: Request):
         # Make a prediction and retrieve the result
         value = model_predictor.predict(dataframe = vehicle_df)[0]
         
-        # Interpret the prediction result as "Response-Yes" pr "Response-No"
-        status = "Response-Yes" if value == 1 else "Response-No"
+        # Interpret the prediction result as "Interested" or "Not Interested"
+        status = "Interested" if value == 1 else "Not Interested"
         
         # Render the same HTML page with the prediction result
         return templates.TemplateResponse(
             request = request,
             name = "vehicleData.html",
             context = {
-                "context": status
+                "context": status,
+                "show_popup" : True
             }
         )
     except Exception as e:

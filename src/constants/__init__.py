@@ -9,7 +9,6 @@ MONGODB_URL_KEY = "MONGODB_URL"
 PIPELINE_NAME: str = ""
 ARTIFACT_DIR : str = "artifact"
 
-MODEL_FILE_NAME = "model.pkl"
 
 TARGET_COLUMN = "Response"
 CURRENT_YEAR = date.today().year
@@ -47,22 +46,44 @@ Model Trainer related constants start with MODEL_TRAINER VAR NAME
 """
 MODEL_TRAINER_DIR_NAME :str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
-MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
-MODEL_TRAINER_MODEL_CONFIG_FILE_PATH: str = os.path.join("config", "model.yaml")
-MODEL_TRAINER_N_ESTIMATORS = 200
-MODEL_TRAINER_MIN_SAMPLES_SPLIT: int = 7
-MODEL_TRAINER_MIN_SAMPLE_LEAF : int = 6
-MIN_SAMPLES_SPLIT_MAX_DEPTH : int = 10
-MIN_SAMPLES_SPLIT_CRITERION: str ="entropy"
-MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101
+MODEL_METRIC_FILE_NAME: str = "trained_models_metrics.yaml"
+
+""" 
+RandomForestClassifier
+"""
+RFC_N_ESTIMATORS = 200
+RFC_MIN_SAMPLES_SPLIT: int = 7
+RFC_MIN_SAMPLE_LEAF : int = 6
+RFC_MIN_SAMPLES_SPLIT_MAX_DEPTH : int = 10
+RFC_MIN_SAMPLES_SPLIT_CRITERION: str ="entropy"
+RFC_MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101
+
+""" 
+GradientBoostingClassifier
+"""
+GBC_MIN_SAMPLE_LEAF:int = 2
+GBC_MIN_SAMPLES_SPLIT: int= 10
+GBC_N_ESTIMATORS: int = 300
+GBC_RANDOM_STATE: int = 42
+GBC_SUBSAMPLE: float = 0.9
+
+""" 
+XGBoostClassifier
+"""
+XGB_N_ESTIMATOR: int = 300
+XGB_MAX_DEPTH: int = 5
+XGB_LEARNING_RATE: int = 0.05
+XGB_COLSAMPLE_BYTREE: float =  0.8
+XGB_GAMMA: float = 0.1
+XGB_MIN_CHILD_WEIGHT: int = 5
 
 """ 
 Model Evaluation related constants
 """
 MODEL_EVALUATON_CHANGED_THRESHOLD_SCORE: float = 0.02
 MODEL_EVALUATION_DIR_NAME : str = "model_evaluation"
-BEST_MODEL_NAME : str = "best_model"
+BEST_MODEL_DIR_NAME : str = "best_model"
 MODEL_EVALUATION_AFTER_BEST_MODEL: str = "best_model.pkl"
 
 """ 

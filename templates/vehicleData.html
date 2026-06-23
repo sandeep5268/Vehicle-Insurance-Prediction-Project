@@ -1,58 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Vehicle Insurance Prediction</title>
-    <!-- Corrected the CSS path -->
-    <link rel="stylesheet" href="/static/css/style.css">
+
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Vehicle Insurance Prediction</h1>
 
-        <form method="post" action="/">
-            <label for="Gender">Gender (1: Male, 0: Female):</label>
-            <input type="number" id="Gender" name="Gender" min="0" max="1" required>
+    <!-- Background Overlay -->
+    <div class="background-overlay"></div>
 
-            <label for="Age">Age:</label>
-            <input type="number" id="Age" name="Age" required>
+    <!-- ================= HOME ================= -->
 
-            <label for="Driving_License">Driving License (0: No, 1: Yes):</label>
-            <input type="number" id="Driving_License" name="Driving_License" min="0" max="1" required>
+    <div class="hero-container">
 
-            <label for="Region_Code">Region Code:</label>
-            <input type="number" step="0.01" id="Region_Code" name="Region_Code" required>
+        <div class="main-card">
 
-            <label for="Previously_Insured">Previously Insured (0: No, 1: Yes):</label>
-            <input type="number" id="Previously_Insured" name="Previously_Insured" min="0" max="1" required>
+            <h1>Vehicle Insurance Prediction</h1>
 
-            <label for="Annual_Premium">Annual Premium:</label>
-            <input type="number" step="0.01" id="Annual_Premium" name="Annual_Premium" required>
+            <p>
+                Predict whether a customer is interested in purchasing
+                vehicle insurance using Machine Learning.
+            </p>
 
-            <label for="Policy_Sales_Channel">Policy Sales Channel:</label>
-            <input type="number" step="0.01" id="Policy_Sales_Channel" name="Policy_Sales_Channel" required>
-
-            <label for="Vintage">Vintage:</label>
-            <input type="number" id="Vintage" name="Vintage" required>
-
-            <label for="Vehicle_Age_lt_1_Year">Vehicle Age < 1 Year (0: No, 1: Yes):</label>
-            <input type="number" id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" min="0" max="1" required>
-
-            <label for="Vehicle_Age_gt_2_Years">Vehicle Age > 2 Years (0: No, 1: Yes):</label>
-            <input type="number" id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" min="0" max="1" required>
-
-            <label for="Vehicle_Damage_Yes">Vehicle Damage (0: No, 1: Yes):</label>
-            <input type="number" id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" min="0" max="1" required>
-
-            <button type="submit">Predict</button>
-        </form>
-
-        {% if context %}
-            <div class="result">
-                <h2>Result: {{ context }}</h2>
+            {% if context %}
+            <div class="result-box">
+                <h2>Prediction Result</h2>
+                <span>{{ context }}</span>
             </div>
-        {% endif %}
+            {% endif %}
+
+            <button class="predict-btn" onclick="openForm()">
+                <i class="fa-solid fa-car"></i>
+                Input Form
+            </button>
+
+        </div>
+
     </div>
+
+    <!-- ================= INPUT FORM ================= -->
+
+    <div id="formModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn" onclick="closeForm()">
+                &times;
+            </span>
+
+            <h2>Enter Customer Details</h2>
+
+            <form method="POST">
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+                        <label>Gender (0 = Female, 1 = Male)</label>
+                        <input type="number"
+                               name="Gender"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Age</label>
+                        <input type="number"
+                               name="Age"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Driving License (1 = Yes, 0 = No)</label>
+                        <input type="number"
+                               name="Driving_License"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Region Code</label>
+                        <input type="number"
+                               step="0.01"
+                               name="Region_Code"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Previously Insured (1 = Yes, 0 = No)</label>
+                        <input type="number"
+                               name="Previously_Insured"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Annual Premium</label>
+                        <input type="number"
+                               step="0.01"
+                               name="Annual_Premium"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Policy Sales Channel</label>
+                        <input type="number"
+                               step="0.01"
+                               name="Policy_Sales_Channel"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vintage</label>
+                        <input type="number"
+                               name="Vintage"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vehicle Age &lt; 1 Year (1 = Yes, 0 = No)</label>
+                        <input type="number"
+                               name="Vehicle_Age_lt_1_Year"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vehicle Age &gt; 2 Years (1 = Yes, 0 = No)</label>
+                        <input type="number"
+                               name="Vehicle_Age_gt_2_Years"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vehicle Damage (1 = Yes, 0 = No)</label>
+                        <input type="number"
+                               name="Vehicle_Damage_Yes"
+                               min="0"
+                               max="1"
+                               required>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Predict
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RESULT POPUP ================= -->
+
+    {% if show_popup %}
+
+    <script>
+        window.onload = function () {
+
+            // Hide home page
+            document.querySelector(".hero-container").style.display = "none";
+
+            // Hide form
+            document.getElementById("formModal").style.display = "none";
+
+            // Show popup
+            document.getElementById("popup").style.display = "flex";
+
+        };
+    </script>
+
+    <div id="popup" class="popup" style="display:flex;">
+        <div class="popup-content">
+
+            {% if context == "Interested" %}
+
+            <div class="icon success">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <h2>Customer Interested</h2>
+
+            <p>
+                Customer is likely to purchase vehicle insurance.
+            </p>
+
+            {% else %}
+
+            <div class="icon danger">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+
+            <h2>Customer Not Interested</h2>
+
+            <p>
+                Customer is unlikely to purchase vehicle insurance.
+            </p>
+
+            {% endif %}
+
+            <button type="button" onclick="goHome()">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <script>
+        function openForm() {
+            document.querySelector(".hero-container").style.display = "none";
+            document.getElementById("formModal").style.display = "flex";
+
+        }
+
+        function closeForm() {
+            document.getElementById("formModal").style.display = "none";
+            document.querySelector(".hero-container").style.display = "flex";
+
+        }
+
+        function goHome(){
+            document.getElementById("popup").style.display = "none";
+            document.querySelector(".hero-container").style.display = "flex";
+
+        }
+
+        window.onclick = function(event){
+            let modal = document.getElementById("formModal");
+            if(event.target == modal){
+                closeForm();
+
+            }
+        }
+    </script>
 </body>
 </html>

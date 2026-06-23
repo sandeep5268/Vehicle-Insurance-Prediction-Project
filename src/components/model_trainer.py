@@ -1,16 +1,18 @@
 import sys
-from typing import Tuple
-
+import os
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
-
+from typing import Tuple
+from dataclasses import asdict
 from src.logger import logging
 from src.exception import MyException
-from src.utils.main_utils import load_numpy_array_data, load_object, save_object
+
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+
+from src.utils.main_utils import load_numpy_array_data, save_object, write_yaml_file
 from src.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact, ClassificationMetricArtifact
 from src.entity.config_entity import ModelTrainerConfig
-from src.entity.estimator import MyModel
 
 class ModelTrainer:
     def __init__(self, data_transformation_artifact: DataTransformationArtifact,
@@ -22,47 +24,81 @@ class ModelTrainer:
         self.data_transformation_artifact = data_transformation_artifact
         self.model_trainer_config = model_trainer_config
         
-    def get_model_object_and_report(self, train: np.array, test: np.array) -> Tuple[object, object]:
+    def get_model_object_and_report(self, train: np.array, test: np.array) -> Tuple[dict, dict, dict]:
         """ 
         Method Name    :  get_model_object_and_report
-        Description    :  This function trains a RandomForestClassifier with specified parameters
+        Description    :  This function trains multiple models with specified parameters
         
         Output         :  Returns metric artifact object and trained model object
         On Failure     :  Write an exception log and then raise an exception
         """
         try:
-            logging.info("Training RandomForestClassifier with specified parameters")
+            logging.info("Training Multiple Models with specified parameters")
             
             # Splitting the train and test data into features and target variables
             x_train, y_train, x_test, y_test = train[:,:-1], train[:,-1], test[:,:-1], test[:, -1]
             logging.info("train-test split done.")
             
-            # Initialize RandomForestClassifier with specified parameters
-            model = RandomForestClassifier(
-                n_estimators= self.model_trainer_config._n_estimators,
-                min_samples_split= self.model_trainer_config._min_samples_split,
-                min_samples_leaf= self.model_trainer_config._min_sample_leaf,
-                max_depth= self.model_trainer_config._max_depth,
-                criterion= self.model_trainer_config._criterion,
-                random_state= self.model_trainer_config._random_state
-            )
+            # Initialize Multiple Models with specified parameters
+            models = {
+                "RandomForest" : RandomForestClassifier(
+                    n_estimators= self.model_trainer_config._n_estimators_rfc,
+                    min_samples_split= self.model_trainer_config._min_samples_split_rfc,
+                    min_samples_leaf= self.model_trainer_config._min_sample_leaf_rfc,
+                    max_depth= self.model_trainer_config._max_depth_rfc,
+                    criterion= self.model_trainer_config._criterion_rfc,
+                    random_state= self.model_trainer_config._random_state_rfc
+                ),
+                "GradientBoosting" : GradientBoostingClassifier(
+                    min_samples_leaf= self.model_trainer_config._min_sample_leaf_gbc,
+                    min_samples_split= self.model_trainer_config._min_samples_split_gbc,
+                    n_estimators= self.model_trainer_config._n_estimator_gbc,
+                    random_state= self.model_trainer_config._random_state_gbc,
+                    subsample= self.model_trainer_config._subsample_gbc
+                ),
+                "XGBoost" : XGBClassifier(
+                    n_estimators = self.model_trainer_config._n_estimator_xgb,
+                    max_depth = self.model_trainer_config._max_depth_xgb,
+                    learning_rate = self.model_trainer_config._learning_rate_xgb,
+                    colsample_bytree = self.model_trainer_config._colsample_bytree_xgb,
+                    gamma = self.model_trainer_config._gamma_xgb,
+                    min_child_weight = self.model_trainer_config._min_child_weight_xgb
+                )
+                
+            }
             
             # Fit the model
             logging.info("Model training going on....!")
-            model.fit(x_train, y_train)
-            logging.info("Model training done.")
-            
-            # Predictions and evaluation metrics
-            y_pred = model.predict(x_test)
-            accuracy = accuracy_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            
-            
-            # Creating Metrics artifact
-            metric_artifact = ClassificationMetricArtifact(f1_score=f1, precision_score=precision, recall_score=recall)
-            return model, metric_artifact
+            models_f1_score_report = {}
+            models_metrics_report = {}
+            model_paths = {}
+            for model_name, model in models.items():
+                logging.info(f"{model_name} Model training started..!")
+                model.fit(x_train, y_train)
+                logging.info(f"{model_name} Model training done.")
+
+                model_path = os.path.join(
+                    self.model_trainer_config.trained_models_dir,f"{model_name}.pkl"
+                )
+                save_object(
+                    file_path=model_path,
+                    obj=model
+                )
+                
+                # Predictions and evaluation metrics
+                y_pred = model.predict(x_test)
+                accuracy = accuracy_score(y_test, y_pred)
+                f1 = f1_score(y_test, y_pred)
+                precision = precision_score(y_test, y_pred)
+                recall = recall_score(y_test, y_pred)
+                
+                # Storing the metrics and model paths in respective dictionaries
+                models_f1_score_report[model_name] = f1
+                metric_artifact = ClassificationMetricArtifact(f1_score=f1, precision_score=precision, recall_score=recall, accuracy_score=accuracy)
+                models_metrics_report[model_name] = asdict(metric_artifact)
+                model_paths[model_name] = model_path
+                
+            return models_metrics_report, models_f1_score_report, model_paths
         except Exception as e:
             raise MyException(e, sys) from e
         
@@ -85,28 +121,23 @@ class ModelTrainer:
             logging.info("train-test data loaded")
             
             # Train Model and get metrics
-            trained_model, metrics_artifact = self.get_model_object_and_report(train = train_arr, test = test_arr)
-            logging.info("Model object an artifact loaded.")
+            logging.info("Models Training Started...!")
+            models_metrics_report, models_f1_score_report, model_paths = self.get_model_object_and_report(train = train_arr, test = test_arr)
+            logging.info("Models Training completed successfully..!")
             
-            # Load preprocessed object
-            preprocessed_obj = load_object(file_path= self.data_transformation_artifact.transformed_object_file_path)
-            logging.info("Preprocessed obj loaded.")
-            
-            #  Check if model's accuracy meets the expected threshold
-            if accuracy_score(train_arr[:, -1], trained_model.predict(train_arr[:, :-1])) < self.model_trainer_config.expected_accuracy:
-                logging.info("No model found with score above the base score")
-                raise Exception("No model found with score above the base score")
-            
-            # Save the final model object that includes both preprocessing and the trained model
-            logging.info("Saving new model as performance better than previous one.")
-            my_model = MyModel(preprocessing_object = preprocessed_obj, trained_model_object = trained_model)
-            save_object(self.model_trainer_config.trained_model_file_path, my_model)
-            logging.info("Saved final model object that includes both preprocessing and the trained model")
+            logging.info("Models metrics report storing as started .....")
+            # Store the models metrics report as yaml file
+            write_yaml_file(
+                self.model_trainer_config.model_metric_file_path,
+                content = models_metrics_report
+            )
+            logging.info("Models metrics report is stored as yaml file")
             
             # Create and return the ModelTrainerArtifact
             model_trainer_artifact = ModelTrainerArtifact(
-                trained_model_file_path=self.model_trainer_config.trained_model_file_path,
-                metric_artifact=metrics_artifact
+                models_path = model_paths,
+                models_metrics_report= models_metrics_report,
+                models_f1_score_report = models_f1_score_report
             )
             logging.info(f"Model trainer artifact: {model_trainer_artifact}")
             return model_trainer_artifact

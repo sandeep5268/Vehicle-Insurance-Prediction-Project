@@ -22,15 +22,17 @@ class ClassificationMetricArtifact:
     f1_score : float
     precision_score : float
     recall_score : float
+    accuracy_score : float
 
 @dataclass
 class ModelTrainerArtifact:
-    trained_model_file_path: str
-    metric_artifact: ClassificationMetricArtifact
+    models_path : dict
+    models_metrics_report : dict[str, ClassificationMetricArtifact]
+    models_f1_score_report : dict
 
 @dataclass
 class ModelEvaluationArtifact:
     is_model_accepted: bool
-    changed_accuracy: float
-    trained_model_path: str
+    changed_f1_score: float
+    trained_best_model_path: str
     best_model_file_path : str
