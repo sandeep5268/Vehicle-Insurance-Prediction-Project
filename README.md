@@ -402,8 +402,6 @@ Vehicle-Insurance-Prediction-Project/
 
 ## 🚀 Quick Start
 
-## 🚀 Quick Start
-
 ### Prerequisites
 
 - Python 3.12
