@@ -25,7 +25,7 @@ An end-to-end MLOps project that automates the complete machine learning lifecyc
 ## 🎥 Project Demo
 
 <p align="center">
-    <video src="assets/demo1.mp4" controls></video>
+    <img src="assets/demo.gif" width="900">
 </p>
 
 <p align="center">
