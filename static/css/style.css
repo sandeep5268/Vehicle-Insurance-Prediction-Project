@@ -547,6 +547,17 @@ body{
 
     }
 
+    .info-icon.active .tooltip{
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    .info-icon:hover .tooltip{
+
+        visibility: visible;
+        opacity: 1;
+    }
+
 }
 
 /* Small arrow */

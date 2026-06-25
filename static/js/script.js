@@ -52,7 +52,7 @@ document.querySelectorAll(".info-icon").forEach(icon => {
         e.stopPropagation();
         document.querySelectorAll(".info-icon").forEach(item =>{
             if(item != this){
-                this.classList.remove("active")
+                item.classList.remove("active")
             }
         });
 
@@ -74,7 +74,7 @@ document.addEventListener("click", () => {
 
 window.onload = function () {
 
-    if (typeof showPopup !== "undeifned" && showPopup) {
+    if (typeof showPopup !== "undefined" && showPopup) {
 
         document.querySelector(".hero-container").style.display = "none";
 
