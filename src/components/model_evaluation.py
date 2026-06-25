@@ -8,10 +8,11 @@ from src.exception import MyException
 from dataclasses import dataclass
 
 from src.entity.config_entity import ModelEvaluationConfig
-from src.entity.artifact_entity import ModelTrainerArtifact, ModelEvaluationArtifact, DataIngestionArtifact
+from src.entity.artifact_entity import ModelTrainerArtifact, ModelEvaluationArtifact, DataIngestionArtifact, DataTransformationArtifact
 from sklearn.metrics import f1_score
 from src.constants import TARGET_COLUMN, SAVED_MODEL_NAME, SAVED_MODELS_DIR
 from src.utils.main_utils import load_object, save_object
+from src.entity.estimator import MyModel
 
 @dataclass
 class EvaluateModelResponse:
@@ -23,11 +24,12 @@ class EvaluateModelResponse:
 class ModelEvaluation:
     
     def __init__(self, model_eval_config: ModelEvaluationConfig, data_ingestion_artifact : DataIngestionArtifact,
-                 model_trainer_artifact: ModelTrainerArtifact):
+                 model_trainer_artifact: ModelTrainerArtifact, data_transformation_artifact: DataTransformationArtifact):
         try:
             self.model_eval_config = model_eval_config
             self.data_ingestion_atifact = data_ingestion_artifact
             self.model_trainer_artifact = model_trainer_artifact
+            self.data_transformation_artifact = data_transformation_artifact
         except Exception as e:
             raise MyException(e, sys) from e
     
@@ -152,10 +154,18 @@ class ModelEvaluation:
                 trained_best_model = load_object(
                     best_model_path
                 )
+                
+                preprocessing_obj = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
+                logging.info("Preporcessing object loaded")
 
+
+                logging.info("saving model by combining preprocessing object and trained best model")
+                my_model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=trained_best_model)
+                
+                
                 save_object(
                     self.model_eval_config.model_evaluation_after_best_model_file_path,
-                    trained_best_model
+                    my_model
                 )
                 
                 # Save stable production model
@@ -165,7 +175,7 @@ class ModelEvaluation:
 
                 save_object(
                     production_model_path,
-                    trained_best_model
+                    my_model
                 )
                 
                 logging.info("New model accepted and saved as best model in both artifact and saved models folders.")

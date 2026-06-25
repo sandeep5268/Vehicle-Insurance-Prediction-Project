@@ -13,9 +13,25 @@
 
 An end-to-end MLOps project that automates the complete machine learning lifecycle—from MongoDB data ingestion and model training to Dockerized deployment with CI/CD and cloud hosting on Render.
 
+## 🌐 Live Demo
+
+
+**🔗 Application:** [Live Demo](https://vehicle-insurance-prediction-project.onrender.com)
 
 **📂 Repository:** [GitHub Repository](https://github.com/sandeep5268/Vehicle-Insurance-Prediction-Project)
 
+---
+
+## 🎥 Project Demo
+
+<p align="center">
+    <img src="assets/demo.gif" width="900">
+</p>
+
+<p align="center">
+    <b>End-to-End Insurance Prediction Workflow:</b>
+    User Input → Data Preprocessing → Model Prediction → Result Display
+</p>
 
 ## 📑 Table of Contents
 
@@ -154,6 +170,34 @@ The model is trained using a vehicle insurance dataset containing customer demog
 
 ✔ Production Ready Architecture
 
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+
+<p align="center">
+    <img src="assets/home_page.png" width="800">
+</p>
+
+### 🎯 Prediction Workflow
+
+The following screenshots show the customer inputs and the generated insurance prediction
+
+<table>
+    <tr>
+        <td align="center">
+            <img src="assets/details_filled.png" width="350">
+            <br>
+            <b>Input Features</b>
+        </td>
+        <td align="center">
+            <img src="assets/prediction_response.png" width="350">
+            <br>
+            <b>Prediction Result</b>
+        </td>
+    </tr>
+</table>
 
 ## ⚙️ Technology Stack
 
@@ -229,9 +273,9 @@ The project evaluates multiple machine learning algorithms and automatically sel
 
 |             Model            |  Precision |  Recall | F1 Score  |  Accuracy |
 |------------------------------|------------|---------|-----------|-----------|
-| Gradient Boosting Classifier |  89.189%   | 97.419% |  93.123%  |  92.417%  |
-| Random Forest Classifier     |  86.705%   | 98.440% |  92.200%  |  91.223%  |
-| XGBoost Classifier           |  88.233%   | 97.362% |  92.573%  |  91.767%  |
+| Gradient Boosting Classifier |  89.012%   | 97.418% |  93.026%  |  92.307%  |
+| Random Forest Classifier     |  86.477%   | 98.439% |  92.027%  |  91.065%  |
+| XGBoost Classifier           |  88.105%   | 97.400% |  92.520%  |  91.700%  |
 
 ### Best Model
 
@@ -532,6 +576,15 @@ Docker Build
 Deployment
 ```
 
+---
+## Deployment
+
+The application is deployed on Render
+
+### Live Application
+https://vehicle-insurance-prediction-project.onrender.com
+
+---
 
 ## 🚀 Future Enhancements
 

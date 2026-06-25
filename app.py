@@ -58,17 +58,17 @@ class DataForm:
         This method is asynchronous to handle form data fetching without blocking
         """
         form = await self.request.form()
-        self.Gender = form.get("Gender")
-        self.Age = form.get("Age")
-        self.Driving_License = form.get("Driving_License")
-        self.Region_Code = form.get("Region_Code")
-        self.Previously_Insured = form.get("Previously_Insured")
-        self.Annual_Premium = form.get("Annual_Premium")
-        self.Policy_Sales_Channel = form.get("Policy_Sales_Channel")
-        self.Vintage = form.get("Vintage")
-        self.Vehicle_Age_lt_1_Year = form.get("Vehicle_Age_lt_1_Year")
-        self.Vehicle_Age_gt_2_Years = form.get("Vehicle_Age_gt_2_Years")
-        self.Vehicle_Damage_Yes = form.get("Vehicle_Damage_Yes")
+        self.Gender = int(form.get("Gender"))
+        self.Age = int(form.get("Age"))
+        self.Driving_License = int(form.get("Driving_License"))
+        self.Region_Code = float(form.get("Region_Code"))
+        self.Previously_Insured = int(form.get("Previously_Insured"))
+        self.Annual_Premium = float(form.get("Annual_Premium"))
+        self.Policy_Sales_Channel = float(form.get("Policy_Sales_Channel"))
+        self.Vintage = float(form.get("Vintage"))
+        self.Vehicle_Age_lt_1_Year = int(form.get("Vehicle_Age_lt_1_Year"))
+        self.Vehicle_Age_gt_2_Years = int(form.get("Vehicle_Age_gt_2_Years"))
+        self.Vehicle_Damage_Yes = int(form.get("Vehicle_Damage_Yes"))
         
     
 # Route to render the main page with the form
@@ -120,6 +120,7 @@ async def predictonRouteClient(request: Request):
         
         # Make a prediction and retrieve the result
         value = model_predictor.predict(dataframe = vehicle_df)[0]
+        print(f"Prediction value: {value}")
         
         # Interpret the prediction result as "Interested" or "Not Interested"
         status = "Interested" if value == 1 else "Not Interested"

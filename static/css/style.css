@@ -20,7 +20,7 @@ body{
     min-height:100vh;
 
     background-image:url("../images/vehicle_desktop_bg.png");
-    background-size:100% 100%;
+    background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
@@ -40,7 +40,7 @@ body{
 
         background-size:cover;
 
-        background-position:center top;
+        background-position:center;
 
         background-repeat:no-repeat;
 
@@ -119,35 +119,6 @@ body{
     margin-bottom:35px;
 }
 
-/* RESULT */
-
-.result-box{
-
-    margin-bottom:30px;
-
-    padding:20px;
-
-    border-radius:15px;
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(0,191,255,.35);
-}
-
-.result-box h2{
-
-    margin-bottom:12px;
-}
-
-.result-box span{
-
-    color:#00ff99;
-
-    font-size:30px;
-
-    font-weight:bold;
-}
-
 /* BUTTON */
 
 .predict-btn,
@@ -222,6 +193,9 @@ body{
 
     background:rgba(0,0,0,.60);
 
+    overflow-y:auto;      /* Allow scrolling */
+    padding:25px 0;     /* Space above & below */
+
     z-index:1000;
 }
 
@@ -232,16 +206,19 @@ body{
     position:relative;
 
     width:700px;
+    max-width:95%;
 
     max-height:90vh;
 
     overflow-y:auto;
 
+    overflow-x:visible;
+
     padding:40px;
 
     border-radius:25px;
 
-    background: rgba(0, 0, 0, 0.45);
+    background:rgba(0,0,0,.45);
 
     backdrop-filter:blur(10px);
 
@@ -249,8 +226,7 @@ body{
 
     border:1px solid rgba(0,191,255,.10);
 
-    box-shadow:
-    0 0 25px rgba(0,191,255,.25);
+    box-shadow:0 0 25px rgba(0,191,255,.25);
 }
 
 .modal-content h2{
@@ -291,6 +267,8 @@ body{
 
     display:flex;
 
+    position: relative;
+
     flex-direction:column;
 }
 
@@ -298,12 +276,13 @@ body{
 
     margin-bottom:8px;
 
-    font-size:16px;
+    font-size:20px;
 
     color:#dddddd;
 }
 
-.input-group input{
+.input-group input,
+.input-group select{
 
     width:100%;
 
@@ -322,7 +301,8 @@ body{
     transition:.3s;
 }
 
-.input-group input:focus{
+.input-group input:focus,
+.input-group select:focus{
 
     outline:none;
 
@@ -341,7 +321,7 @@ body{
 
     right:25px;
 
-    top:15px;
+    top:-10px;
 
     font-size:40px;
 
@@ -483,4 +463,165 @@ body{
 
         width:90%;
     }
+}
+
+.info-icon{
+
+    position:relative;
+
+    display:inline-flex;
+
+    justify-content:center;
+    align-items:center;
+
+    width:18px;
+    height:18px;
+
+    margin-left:8px;
+
+    border-radius:50%;
+
+    background:#0f1010;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.tooltip{
+
+    position:absolute;
+
+    bottom:130%;
+
+    left:50%;
+
+    transform:translateX(-30%);
+
+    min-width:220px;
+
+    max-width: 280px;
+
+    width: max-content;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    background:#222;
+
+    color:#fff;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    text-align:left;
+
+    visibility:hidden;
+
+    opacity:0;
+
+    transition:.25s;
+
+    z-index:9999;
+
+    box-shadow:0 0 10px rgba(0,0,0,.4);
+}
+
+@media(max-width:768px){
+
+    .tooltip{
+
+        left:0;
+
+        transform:none;
+
+        width:200px;
+
+        max-width:80vw;
+
+    }
+
+}
+
+/* Small arrow */
+
+.tooltip::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:100%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border-width:8px;
+
+    border-style:solid;
+
+    border-color:#222 transparent transparent transparent;
+}
+
+/* Desktop Hover */
+
+.info-icon:hover .tooltip{
+
+    visibility:visible;
+
+    opacity:1;
+}
+
+/* Mobile Tap */
+
+.info-icon:focus .tooltip{
+
+    visibility:visible;
+
+    opacity:1;
+}
+
+/* Active Tooltip */
+.info-icon.active .tooltip{
+    visibility :visible;
+    opacity: 1;
+}
+
+/* Back Button */
+.form-header{
+
+    position:relative;
+    width:100%;
+    height: 40px;
+
+}
+
+.back-btn{
+
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    transition: .3s;
+
+}
+
+.back-btn:hover{
+    background: rgba(0,191,255,.2);
+    color:#00bfff;
+    transform:translateX(-4px)
+
 }

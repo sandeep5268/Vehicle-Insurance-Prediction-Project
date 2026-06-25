@@ -32,13 +32,6 @@
                 vehicle insurance using Machine Learning.
             </p>
 
-            {% if context %}
-            <div class="result-box">
-                <h2>Prediction Result</h2>
-                <span>{{ context }}</span>
-            </div>
-            {% endif %}
-
             <button class="predict-btn" onclick="openForm()">
                 <i class="fa-solid fa-car"></i>
                 Input Form
@@ -54,9 +47,18 @@
 
         <div class="modal-content">
 
-            <span class="close-btn" onclick="closeForm()">
-                &times;
-            </span>
+            <div class="form-header">
+
+                <button type="button"
+                    class="back-btn"
+                    onClick="goBack()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+
+                <span class="close-btn" onclick="closeForm()">
+                    &times;
+                </span>
+            </div>
 
             <h2>Enter Customer Details</h2>
 
@@ -65,95 +67,187 @@
                 <div class="form-grid">
 
                     <div class="input-group">
-                        <label>Gender (0 = Female, 1 = Male)</label>
+                        <label for="gender">Gender (0 = Female, 1 = Male)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Select the customer's gender as Male(1) or Female(0).
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Gender"
-                               min="0"
-                               max="1"
-                               required>
+                            id="gender"
+                            name="Gender"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Age</label>
+                        <label for="age">Age
+
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter the customer's age in completed years (18-100).
+                                </span>
+                            </span>
+
+                        </label>
+
                         <input type="number"
-                               name="Age"
-                               required>
+                            id="age"
+                            name="Age"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Driving License (1 = Yes, 0 = No)</label>
+                        <label for="driving_license">Driving License (1 = Yes, 0 = No)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter 1 if the customer has a valid driving license, otherwise enter 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Driving_License"
-                               min="0"
-                               max="1"
-                               required>
+                            id="driving_license"
+                            name="Driving_License"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Region Code</label>
+                        <label for="region_code">Region Code
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter the numeric region code where the customer resides.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               step="0.01"
-                               name="Region_Code"
-                               required>
+                            id="region_code"
+                            step="0.01"
+                            name="Region_Code"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Previously Insured (1 = Yes, 0 = No)</label>
+                        <label for="previously_insured">Previously Insured (1 = Yes, 0 = No)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter 1 if the customer already has vehicle insurance, otherwise enter 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Previously_Insured"
-                               min="0"
-                               max="1"
-                               required>
+                            id="previously_insured"
+                            name="Previously_Insured"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Annual Premium</label>
+                        <label for="annual_premium">Annual Premium
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter the annual insurance premium amount in Indian Rupees without commas. Applicable only for previously insuranced customer otherwise 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               step="0.01"
-                               name="Annual_Premium"
-                               required>
+                            id="annual_premium"
+                            step="0.01"
+                            name="Annual_Premium"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Policy Sales Channel</label>
+                        <label for="policy_sales_channel">Policy Sales Channel
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter the policy sales channel ID through which the insurance was sold.
+                                    Example:26, 124, 152, 156, 160
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               step="0.01"
-                               name="Policy_Sales_Channel"
-                               required>
+                            id="policy_sales_channel"
+                            step="0.01"
+                            name="Policy_Sales_Channel"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Vintage</label>
+                        <label for="vintage">Vintage
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter the number of days the customer has been associated with the company. Applicable only to existing customers
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Vintage"
-                               required>
+                            id="vintage"
+                            name="Vintage"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Vehicle Age &lt; 1 Year (1 = Yes, 0 = No)</label>
+                        <label for="vehicle_age_lt_1_year">Vehicle Age &lt; 1 Year (1 = Yes, 0 = No)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter 1 if the customer vehicle age is less than 1 year, otherwise enter 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Vehicle_Age_lt_1_Year"
-                               min="0"
-                               max="1"
-                               required>
+                            id="vehicle_age_lt_1_year"
+                            name="Vehicle_Age_lt_1_Year"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Vehicle Age &gt; 2 Years (1 = Yes, 0 = No)</label>
+                        <label for="vehicle_age_gt_2_years">Vehicle Age &gt; 2 Years (1 = Yes, 0 = No)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter 1 if the customer vehicle age is greater than 2 years, otherwise enter 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Vehicle_Age_gt_2_Years"
-                               min="0"
-                               max="1"
-                               required>
+                            id="vehicle_age_gt_2_years"
+                            name="Vehicle_Age_gt_2_Years"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                     <div class="input-group">
-                        <label>Vehicle Damage (1 = Yes, 0 = No)</label>
+                        <label for="vehicle_damage">Vehicle Damage (1 = Yes, 0 = No)
+                            <span class="info-icon" tabindex="0">
+                                ⓘ
+                                <span class="tooltip">
+                                    Enter 1 if the customer vehicle damaged, otherwise enter 0.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number"
-                               name="Vehicle_Damage_Yes"
-                               min="0"
-                               max="1"
-                               required>
+                            id="vehicle_damage"
+                            name="Vehicle_Damage_Yes"
+                            min="0"
+                            max="1"
+                            required>
                     </div>
 
                 </div>
@@ -173,22 +267,7 @@
 
     {% if show_popup %}
 
-    <script>
-        window.onload = function () {
-
-            // Hide home page
-            document.querySelector(".hero-container").style.display = "none";
-
-            // Hide form
-            document.getElementById("formModal").style.display = "none";
-
-            // Show popup
-            document.getElementById("popup").style.display = "flex";
-
-        };
-    </script>
-
-    <div id="popup" class="popup" style="display:flex;">
+    <div id="popup" class="popup" style="display:none;">
         <div class="popup-content">
 
             {% if context == "Interested" %}
@@ -226,33 +305,11 @@
     </div>
 
     {% endif %}
-
     <script>
-        function openForm() {
-            document.querySelector(".hero-container").style.display = "none";
-            document.getElementById("formModal").style.display = "flex";
-
-        }
-
-        function closeForm() {
-            document.getElementById("formModal").style.display = "none";
-            document.querySelector(".hero-container").style.display = "flex";
-
-        }
-
-        function goHome(){
-            document.getElementById("popup").style.display = "none";
-            document.querySelector(".hero-container").style.display = "flex";
-
-        }
-
-        window.onclick = function(event){
-            let modal = document.getElementById("formModal");
-            if(event.target == modal){
-                closeForm();
-
-            }
-        }
+        const showPopup = {{"true" if show_popup else "false"}};
     </script>
+
+    <script src="/static/js/script.js"></script>
+
 </body>
 </html>
