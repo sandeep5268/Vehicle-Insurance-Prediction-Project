@@ -25,7 +25,7 @@ An end-to-end MLOps project that automates the complete machine learning lifecyc
 ## 🎥 Project Demo
 
 <p align="center">
-    <img src="assets/demo.gif" width="900">
+    <video src="assets/demo1.mp4" controls></video>
 </p>
 
 <p align="center">
@@ -287,10 +287,10 @@ The project evaluates multiple machine learning algorithms and automatically sel
 
 | Metric    |  Score  |
 | --------- | ------- |
-| F1 Score  | 93.123% |
-| Accuracy  | 92.417% |
-| Precision | 89.189% |
-| Recall    | 97.419% |
+| F1 Score  | 93.026% |
+| Accuracy  | 92.307% |
+| Precision | 89.012% |
+| Recall    | 97.418% |
 
 
 ### Model Selection Strategy
