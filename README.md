@@ -529,13 +529,13 @@ Provides:
 ### Build Docker Image
 
 ```bash
-docker build -t vehicle-insurance .
+docker build -t vehicle-insurance-prediction-project .
 ```
 
 ### Run Docker Container
 
 ```bash
-docker run -p 5000:5000 vehicle-insurance
+docker run -p 5000:5000 vehicle-insurance-prediction-project
 ```
 
 ### Run with MongoDB URL
