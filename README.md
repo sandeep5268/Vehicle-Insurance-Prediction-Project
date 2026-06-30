@@ -544,7 +544,7 @@ docker run -p 5000:5000 vehicle-insurance-prediction-project
 docker run \
 -e MONGODB_URL="<mongodb_connection_string>" \
 -p 5000:5000 \
-vehicle-insurance
+vehicle-insurance-prediction-project
 ```
 
 ---
